@@ -1,0 +1,23 @@
+
+.userloginForm{
+ width: 500px;
+ margin: 20px;
+ padding: 20px;
+ border-radius: 15px;
+ background-color: #ff5a60;
+}
+
+.userloginForm div {
+    margin-bottom: 10px;
+}
+.userloginForm label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+}
+
+.userloginForm input {
+    width: 300px;
+    padding: 5px;
+    margin-left: 10px;
+}

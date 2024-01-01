@@ -1,0 +1,23 @@
+
+.userSignupForm{
+    width: 500px;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid red;
+    border-radius: 15px;
+    background-color: #ff5a60;
+}
+
+.userSignupForm div{
+    margin-bottom: 10px;
+}
+.userSignupForm label{
+    display: inline-block;
+    width: 150px;
+    font-weight:bold ;
+}
+.userSignupForm input {
+    width: 300px;
+    padding: 5px;
+    margin-left: 10px;
+}
