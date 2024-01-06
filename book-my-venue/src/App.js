@@ -3,15 +3,14 @@ import "./App.css";
 import Home from "./Components/Home";
 import Vmsignup from "./Components/vmsignup";
 import UserSignup from "./Components/UserSignup";
-import Vmlogin from "./Components/Vmlogin";
 import UserLogin from "./Components/Userlogin";
-import VenueDetails from "./Components/VenueDetails";
 import Trial from "./Components/Trial";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import Contact from "./Components/Contact";
-import BMVYourVenue from "./Components/BMVYourVenue";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AddYourVenue from "./Components/AddYourVenue";
+import VenueDetails from "./Components/VenueDetails";
 
 function App() {
   return (
@@ -22,11 +21,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/vmSignUp" element={<Vmsignup />} />
           <Route path="/userLogin" element={<UserLogin />} />
-          <Route path="/venueManagerLogin" element={<Vmlogin />} />
           <Route path="/userSignUp" element={<UserSignup />} />
-          <Route path="/venueDetails" element={<VenueDetails />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/bmvYourVenue" element={<BMVYourVenue/>} />
+          <Route path="/addYourVenue" element={<AddYourVenue/>} />
+          <Route path="/venueDetails" element={<VenueDetails/>} />
           <Route path="/trial" element={<Trial />} />
           <Route Component={Error} />
         </Routes>

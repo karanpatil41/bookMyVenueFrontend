@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const VenuesList = ({ searchParams }) => {
+const VenuesList = ({ data }) => {
   const [venues, setVenues] = useState([]);
 
   useEffect(() => {
@@ -22,6 +22,8 @@ const VenuesList = ({ searchParams }) => {
   return (
     <div>
       <h2>Venues List</h2>
+      <p>Data in Child: {data}</p>
+      
       <ul>
         {venues.map((venue) => (
           <li key={venue.id}>{venue.name}</li>
@@ -31,5 +33,10 @@ const VenuesList = ({ searchParams }) => {
     </div>
   );
 };
-
-export default VenuesList;
+const mapStateToProps = (state) => {
+  return {
+    data: state.data,
+  };
+};
+// export default VenuesList;
+export default connect(mapStateToProps)(VenuesList);

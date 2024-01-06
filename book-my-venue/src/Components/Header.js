@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import axios from "axios";
+import "./Header.css";
 
 const Header = () => {
   const initialFormData = {
@@ -20,30 +20,68 @@ const Header = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    try {
+      //Make a POST request to your server endpoint
+      const response = await axios.post(
+        "http://localhost:8080/api/venue",
+        formData
+      );
+      console.log("Server Response: ", response.data);
+    } catch (error) {
+      console.error("Error sending data to the server: ", error);
+    }
 
     setFormData(initialFormData);
   };
   //State to manage dropdown visibility
   const [dropdownVisible, setDropDownVisible] = useState(false);
 
-  const handleDropdownToggle = () => {
-    setDropDownVisible(!dropdownVisible);
+  const handleMouseEnter = () => {
+    setDropDownVisible(true);
   };
 
+  const handleMouseLeave = () => {
+    setDropDownVisible(false);
+  };
+
+  useEffect(() => {
+    // Add event listener to update the scroll position
+    const handleScroll = () => {
+      const header = document.getElementById("header");
+
+      if (window.scrollY > header.offsetTop) {
+        header.classList.add("fixed-header");
+      } else {
+        header.classList.remove("fixed-header");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
-    <div className="container py-4">
-      <div className="row">
+    <div className="container-fluid py-3 dark-background" id="header">
+      <div className="row justify-content-between">
         {/* Container 1: Logo */}
         <div className="col-md-3">
           <NavLink to="/">
-            <img src="" alt="logo" />
+            <img
+              src="/images/logo11.jpeg"
+              alt="logo"
+              // style={{ maxWidth: "80%", maxHeight: "90%" }}
+              style={{ maxWidth: "200px", maxHeight: "100px" }}
+            />
           </NavLink>
         </div>
         {/* Container 2:  Search Inputs and Button */}
-        <div className="col-md-6 text-center">
+        <div className="col-md-6 text-center mt-4">
           <div className="row justify-content-center">
             <div className="col-md-3">
               <input
@@ -93,13 +131,39 @@ const Header = () => {
           </div>
         </div>
         {/* Container 3: Toggle button */}
-        <div className="col-md-2">
-          <Dropdown>
-            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+        <div className="col-md-2 mt-4 d-flex justify-content-end">
+          <NavLink
+            to="/userLogin"
+            className="mr-4"
+            style={{
+              color: "white",
+              textDecoration: "none",
+              // transition: "color 0.3s ease-in-out", // Adding transition effect
+            }}
+            // activestyle={{ color: "orange" }} // Corrected the prop name
+            // hoverstyle={{ color: "orange" }} // Adding hover effect
+          >
+            Login
+          </NavLink>
+          <Dropdown
+            show={dropdownVisible}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Dropdown.Toggle
+              variant="secondary"
+              id="dropdown-basic"
+              className="mr-2"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <MdOutlineMenu />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
+            <Dropdown.Menu
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <Dropdown.Item as={NavLink} to="/userLogin">
                 Login
               </Dropdown.Item>
@@ -107,8 +171,11 @@ const Header = () => {
                 Sign up
               </Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item as={NavLink} to="/bmvYourVenue">
+              <Dropdown.Item as={NavLink} to="/addYourVenue">
                 Add Your Venue
+              </Dropdown.Item>
+              <Dropdown.Item as={NavLink} to="/vmSignUp">
+                Venue Manager SignUp
               </Dropdown.Item>
               <Dropdown.Item as={NavLink} to="/contact">
                 Contact Us

@@ -31,7 +31,7 @@ function UserLogin() {
 
   return (
     <div>
-      <h2>User Sign in: </h2>
+      <h2>Sign in: </h2>
       <form className="col-md-2" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username: </label>

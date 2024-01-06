@@ -8,3 +8,24 @@ a.text-light {
 a.text-light:hover {
     border-bottom: 1px solid #ff5a60;
 }
+.footer {
+    background-color: #343a40; /* Add your desired background color */
+    color: #fff; /* Set text color to white or your preferred color */
+    padding: 20px 0; /* Adjust padding as needed */
+  }
+  
+  .footer hr {
+    background-color: #fff; /* Set the color of the horizontal rule (hr) */
+  }
+  
+  .footer p {
+    margin: 0; /* Remove default margin for the paragraph */
+  }
+  
+  .footer a {
+    color: #fff; /* Set the color of links in the footer */
+  }
+  
+  .footer a:hover {
+    border-bottom: 1px solid #ff5a60;
+  }

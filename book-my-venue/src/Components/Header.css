@@ -1,0 +1,15 @@
+.fixed-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+.dark-background{
+    background-color: #343a40;
+    
+}
+/* Add this rule for hover effect on the Login link */
+.col-md-2 a:hover {
+  color: #ff5a60;
+  transition: color 0.3s ease-in-out; /* Adding transition effect */
+}

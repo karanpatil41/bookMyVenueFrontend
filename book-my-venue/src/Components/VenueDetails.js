@@ -1,70 +1,61 @@
 import React, { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import Menu from "./menuApi";
 
-function VenueDetails(props) {
-  const dataFromParent = props.parentData;
+const VenueDetails = ({onDataChanged}) => {
 
-  const initialData = {
-    venueName: "",
-    venueCapacity: "",
-    venueLocation: "",
+  const [inputValue, setInputValue]=useState('');
+
+  const { id } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const receivedParam = queryParams.get("param");
+
+
+  // Assuming you have a function to fetch venue details by ID
+  // Replace it with your actual data fetching logic
+  const getVenueDetailsById = (venueId) => {
+    // Example: Get venue details from the Menu array
+    
+    return Menu.find((venue) => venue.id === parseInt(venueId));
   };
-  const [formData, setFormData] = useState(initialData);
+  const venueDetails = getVenueDetailsById(id);
 
-  //   const parentData = location.state && location.state.formData;
+  if (!venueDetails) {
+    return <div>Venue not found</div>;
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log(formData);
-    console.log("Data received from parent: " + dataFromParent);
-  };
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    const newData = e.target.value;
+    setInputValue(newData);
+    onDataChanged(newData);
+  }
+  const { name, image, description } = venueDetails;
+
   return (
     <div>
-      {/* <h1>hello: {name}</h1> */}
-      <h1>Enter Venue Details</h1>
-      <p>Data received from parent: {dataFromParent}</p>
-      <form className="signupForm" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="venueName">VenueName: </label>
-          <input
-            type="text"
-            id="venueName"
-            name="venueName"
-            value={formData.venueName}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="venueCapacity">Venue Capacity: </label>
-          <input
-            type="text"
-            id="venueCapacity"
-            name="venueCapacity"
-            value={formData.venueCapacity}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="venueLocation">Venue Location: </label>
-          <input
-            type="text"
-            id="venueLocation"
-            name="venueLocation"
-            value={formData.venueLocation}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button type="submit">Submit Venue Details</button>
-      </form>
+      <input  type="text" value={inputValue} onChange={handleInputChange}/>
+      <h2>Component B</h2>
+      {receivedParam && <p>Received Parameter: {receivedParam}</p>}
     </div>
+    // <div>
+    //   <h2>Venue Details</h2>
+    //   <div>
+    //     <h5>{name}</h5>
+    //     <img
+    //       src={image}
+    //       className="rounded img-thumbnail venue-img"
+    //       alt={name}
+    //       style={{ maxWidth: "100%", maxHeight: "200px" }}
+    //     />
+    //     <div>
+    //       <h5>{id}</h5>
+
+    //       <p>{description}</p>
+    //     </div>
+    //   </div>
+    // </div>
   );
-}
+};
 
 export default VenueDetails;
