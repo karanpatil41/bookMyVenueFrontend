@@ -9,13 +9,26 @@ const AddYourVenue = () => {
     address: "",
     capacity: "",
     amount: "",
-    // image: "", // This should be a File object, not a string
+    image: "", // This should be a File object, not a string
     description: "",
   };
   const [formData, setFormData] = useState(initialData);
+  const [contactNumberError, setContactNumberError] = useState("");
 
   const handleInputChange = (e) => {
-    const { name, type, files } = e.target;
+    const { name, type, files, value } = e.target;
+
+    // Validate contactNumber
+    if (name === "contactNumber") {
+      const isValidContactNumber = /^\d{10}$/.test(value);
+      if (!isValidContactNumber) {
+        // Display error message
+        setContactNumberError("Contact number should be of 10 digits");
+      } else {
+        // Clear error message if contact number is valid
+        setContactNumberError("");
+      }
+    }
 
     if (type === "file") {
       const file = e.target.files[0]; // Get the first file
@@ -33,6 +46,11 @@ const AddYourVenue = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Venue Form Data: ", formData);
+    // Check if there is an error message for contactNumber
+    if (contactNumberError) {
+      console.log("Invalid contact number. Please correct the error.");
+      return;
+    }
 
     try {
       const formDataObject = new FormData();
@@ -42,12 +60,12 @@ const AddYourVenue = () => {
         // if (key === "image") {
         //   formDataObject.append(key, formData[key][0]); // Append the first file from the array
         // } else {
-          formDataObject.append(key, formData[key]);
+        formDataObject.append(key, formData[key]);
         // }
       });
 
       const response = await axios.post(
-        "http://localhost:8080/api/venue",
+        "http://localhost:8080/api/venue/createVenue",
         formDataObject,
         {
           headers: {
@@ -113,6 +131,12 @@ const AddYourVenue = () => {
             id="contactNumber"
             onChange={handleInputChange}
           />
+          {/* Display error message if there is one */}
+          {contactNumberError && (
+            <div style={{ color: "red", marginBottom: "10px" }}>
+              {contactNumberError}
+            </div>
+          )}
         </div>
         <div className="mb-3">
           <label for="address" className="form-label">
