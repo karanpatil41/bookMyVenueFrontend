@@ -1,16 +1,22 @@
+import axios from "axios";
 import React, { useState } from "react";
 // import './UserSignup.css';
 import { useNavigate } from "react-router-dom";
 
 const UserSignup = () => {
-  const [formData, setFormData] = useState({
-    cName: "",
-    cEmail: "",
-    cNumber: "",
-    cAddress: "",
-    cUsername: "",
+  const initialData = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    contactNumber: "",
+    address: "",
+    password: "",
     cPassword: "",
-  });
+    roleId:1,
+  };
+  const [formData, setFormData] = useState(initialData);
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -19,36 +25,69 @@ const UserSignup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    navigate("/userLogin", {
-      state: { message: "Sign up successful.Please login" }
-    });
+
+    if (formData.password !== formData.cPassword) {
+      setPasswordMatchError(true);
+      return;
+    }
+    setPasswordMatchError(false);
+
+    try {
+      //Send user data to the server using Axios
+      const response = await axios.post(
+        "http://localhost:8080/api/users/signup",
+        formData
+      );
+
+      //Check the response and handle success or error accordingly
+      if (response.status === 201) {
+        console.log("User signed up successfully");
+        setFormData(initialData);
+      } else {
+        console.error("Error signing up user");
+        setSubmitError("Error signing up user");
+      }
+    } catch (error) {
+      console.error("Error signing up user", error.message);
+      setSubmitError("Error signing up user");
+    }
   };
   return (
     <div>
       <h1>User SignUp Page</h1>
       <form className="col-md-3" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="cName">Name :</label>
+        <div>
+          <label htmlFor="firstName">First Name: </label>
           <input
             type="text"
-            id="cName"
-            name="cName"
+            id="firstName"
+            name="firstName"
             className="form-control"
-            value={formData.cName}
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="lastName">Last Name: </label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            className="form-control"
+            value={formData.lastName}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label htmlFor="cEmail">Email :</label>
+          <label htmlFor="email">Email :</label>
           <input
-            type="text"
-            id="cEmail"
-            name="cEmail"
+            type="email"
+            id="email"
+            name="email"
             className="form-control"
-            value={formData.cEmail}
+            value={formData.email}
             onChange={handleChange}
           />
         </div>
@@ -56,37 +95,37 @@ const UserSignup = () => {
           <label htmlFor="cName">Mobile Number :</label>
           <input
             type="text"
-            id="cNumber"
-            name="cNumber"
+            id="contactNumber"
+            name="contactNumber"
             className="form-control"
-            value={formData.cNumber}
+            value={formData.contactNumber}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label htmlFor="cAddress">Address :</label>
+          <label htmlFor="address">Address :</label>
           <input
             type="text"
-            id="cAddress"
-            name="cAddress"
+            id="address"
+            name="address"
             className="form-control"
-            value={formData.cAddress}
+            value={formData.address}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label htmlFor="cUsername">Username :</label>
+          <label htmlFor="password">Password :</label>
           <input
-            type="text"
-            id="cUsername"
-            name="cUsername"
+            type="password"
+            id="password"
+            name="password"
             className="form-control"
-            value={formData.cUsername}
+            value={formData.password}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label htmlFor="cPassword">Password :</label>
+          <label htmlFor="password">Confirm Password :</label>
           <input
             type="password"
             id="cPassword"
@@ -96,29 +135,12 @@ const UserSignup = () => {
             onChange={handleChange}
           />
         </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault1"
-          />
-          <label class="form-check-label" for="flexRadioDefault1">
-            Male
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="flexRadioDefault"
-            id="flexRadioDefault2"
-          />
-          <label class="form-check-label" for="flexRadioDefault2">
-            Female
-          </label>
-        </div>
-        <button type="submit" className="btn btn-warning">
+
+        {passwordMatchError && (
+          <div className="text-danger mt-2">Passwords do not match.</div>
+        )}
+        {submitError && <div className="text-danger mt-2">{submitError}</div>}
+        <button type="submit" className="btn btn-warning mt-3">
           SignUp
         </button>
       </form>

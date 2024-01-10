@@ -161,7 +161,7 @@ const AddYourVenue = () => {
             value={formData.capacity}
             className="form-control"
             id="capacity"
-            placeholder="Enter Capacity of guests"
+            placeholder="Enter Guest Capacity"
             onChange={handleInputChange}
           />
         </div>
@@ -175,7 +175,7 @@ const AddYourVenue = () => {
             value={formData.amount}
             className="form-control"
             id="amount"
-            placeholder="Enter price to be paid for your venue per day"
+            placeholder="Enter price to be paid for venue per day"
             onChange={handleInputChange}
           />
         </div>

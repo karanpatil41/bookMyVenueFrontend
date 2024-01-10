@@ -71,7 +71,6 @@ const Venue = () => {
                       <h5 className="card-title">{venueName}</h5>
                       <p className="card-text">{amount}</p>
                       <p className="card-text">{contactNumber}</p>
-                      <p className="card-text">{description}</p>
                       <p className="card-text">{address}</p>
                       <p className="card-text">{capacity}</p>
                       <button type="button" className="btn btn-warning">
