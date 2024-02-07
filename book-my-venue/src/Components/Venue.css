@@ -5,3 +5,14 @@
   .venue-img{
     height: 200px;
   }
+  .venue-card .card-body {
+    padding: 1rem; /* Adjust padding as needed */
+  } 
+  .venue-card .card-body p {
+    margin-bottom: 0.1rem; /* Adjust margin between each details line */
+  }
+
+  .venue-card .card-title {
+    margin-bottom: 0.5rem; /* Adjust margin between title and details */
+    text-decoration: none;
+  }

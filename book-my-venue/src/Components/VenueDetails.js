@@ -1,60 +1,71 @@
-import React, { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import Menu from "./menuApi";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
-const VenueDetails = ({onDataChanged}) => {
+const VenueDetails = ({ onDataChanged }) => {
+  const [venueDetails, setVenueDetails] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
-  const [inputValue, setInputValue]=useState('');
-
-  const { id } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const receivedParam = queryParams.get("param");
+  const id = queryParams.get("id");
 
-
-  // Assuming you have a function to fetch venue details by ID
-  // Replace it with your actual data fetching logic
-  const getVenueDetailsById = (venueId) => {
-    // Example: Get venue details from the Menu array
-    
-    return Menu.find((venue) => venue.id === parseInt(venueId));
-  };
-  const venueDetails = getVenueDetailsById(id);
-
-  if (!venueDetails) {
-    return <div>Venue not found</div>;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //Fetch data using axios
+        const response = await axios.get(
+          `http://localhost:8080/api/venue/venueDetails?id=${id}`
+        );
+        setVenueDetails(response.data);
+        console.log("Server response: ", response.data);
+      } catch (error) {
+        console.error("Error fetching venue details: ", error);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const handleInputChange = (e) => {
     const newData = e.target.value;
     setInputValue(newData);
     onDataChanged(newData);
+  };
+  if (!venueDetails) {
+    return <div>Loading...</div>;
   }
-  const { name, image, description } = venueDetails;
+
+  const {
+    username,
+    venueName,
+    address,
+    capacity,
+    amount,
+    description,
+    contactNumber,
+    image,
+  } = venueDetails;
 
   return (
     <div>
-      <input  type="text" value={inputValue} onChange={handleInputChange}/>
-      <h2>Component B</h2>
-      {receivedParam && <p>Received Parameter: {receivedParam}</p>}
+      <h2>Venue Details</h2>
+      <img
+        src={`data:image/jpeg;base64,${image}`}
+        className="rounded img-thumbnail venue-img"
+        alt={id}
+        style={{ maxWidth: "100%", maxHeight: "200px" }}
+      />
+      <p>Username: {username}</p>
+      <p>Venue Name: {venueName}</p>
+      <p>Address: {address}</p>
+      <p>Capacity: {capacity}</p>
+      <p>Amount: {amount}</p>
+      <p>Description: {description}</p>
+      <p>Contact Number: {contactNumber}</p>
+      <button type="button" className="btn btn-warning">
+        Book Now
+      </button>
     </div>
-    // <div>
-    //   <h2>Venue Details</h2>
-    //   <div>
-    //     <h5>{name}</h5>
-    //     <img
-    //       src={image}
-    //       className="rounded img-thumbnail venue-img"
-    //       alt={name}
-    //       style={{ maxWidth: "100%", maxHeight: "200px" }}
-    //     />
-    //     <div>
-    //       <h5>{id}</h5>
-
-    //       <p>{description}</p>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 

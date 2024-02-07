@@ -34,7 +34,7 @@ const Venue = () => {
 
   return (
     <div>
-      <section className="container mt-4">
+      <section className="container mt-3">
         <div className="row">
           {currentVenues.map((curElem) => {
             const {
@@ -51,8 +51,9 @@ const Venue = () => {
             return (
               <div className="col-md-4 mb-4" key={id}>
                 <NavLink
+                  as="div" // Use a div instead of the default anchor tag
                   to={{
-                    pathname: "/venueDetails",
+                    pathname: "/api/venue/venueDetails",
                     search: `id=${id}`,
                     state: { curElem: curElem },
                   }}
@@ -64,15 +65,16 @@ const Venue = () => {
                       alt={id}
                       style={{ maxWidth: "100%", maxHeight: "200px" }}
                     />
-                    <span className="card-number card-circle subtle">
-                      {curElem.id}
-                    </span>
+
                     <div className="card-body">
+                      <span className="card-number card-circle subtle">
+                        {curElem.id}
+                      </span>
                       <h5 className="card-title">{venueName}</h5>
-                      <p className="card-text">{amount}</p>
+                      <p className="card-text">₹ {amount}/day</p>
                       <p className="card-text">{contactNumber}</p>
                       <p className="card-text">{address}</p>
-                      <p className="card-text">{capacity}</p>
+                      <p className="card-text">Capacity: {capacity}</p>
                       <button type="button" className="btn btn-warning">
                         Book Now
                       </button>

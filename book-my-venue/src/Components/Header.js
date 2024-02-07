@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import axios from "axios";
 import "./Header.css";
+import { useDispatch, useSelector } from "react-redux";
+import { logout as logoutAction } from "../features/authSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const initialFormData = {
@@ -14,6 +17,18 @@ const Header = () => {
     numberOfGuests: "",
   };
   const [formData, setFormData] = useState(initialFormData);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
+
+    //update the global store
+    dispatch(logoutAction());
+    toast.success("User logged out succesfully");
+    navigate("/");
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -132,19 +147,28 @@ const Header = () => {
         </div>
         {/* Container 3: Toggle button */}
         <div className="col-md-2 mt-4 d-flex justify-content-end">
-          <NavLink
-            to="/userLogin"
-            className="mr-4"
-            style={{
-              color: "white",
-              textDecoration: "none",
-              // transition: "color 0.3s ease-in-out", // Adding transition effect
-            }}
-            // activestyle={{ color: "orange" }} // Corrected the prop name
-            // hoverstyle={{ color: "orange" }} // Adding hover effect
-          >
-            Login
-          </NavLink>
+              <NavLink
+                to="/userLogin"
+                className="mr-4"
+                style={{
+                  color: "white",
+                  textDecoration: "none",
+                }}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                onClick={onLogout}
+                className="mr-4"
+                style={{
+                  color: "white",
+                  textDecoration: "none",
+                  pointerEvents: "auto",
+                }}
+              >
+                Logout
+              </NavLink>
+         
           <Dropdown
             show={dropdownVisible}
             onMouseEnter={handleMouseEnter}
@@ -166,6 +190,9 @@ const Header = () => {
             >
               <Dropdown.Item as={NavLink} to="/userLogin">
                 Login
+              </Dropdown.Item>
+              <Dropdown.Item as={NavLink} onClick={onLogout}>
+                Logout
               </Dropdown.Item>
               <Dropdown.Item as={NavLink} to="/userSignUp">
                 Sign up

@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+// import { fetchAndSetToken } from "../Redux/authAction";
 
 const AddYourVenue = () => {
+  const status = useSelector((state) => state.auth);
+  console.log(`status = `,status.status);
+
   const initialData = {
     username: "",
     venueName: "",
@@ -15,8 +20,10 @@ const AddYourVenue = () => {
   const [formData, setFormData] = useState(initialData);
   const [contactNumberError, setContactNumberError] = useState("");
 
+ 
+
   const handleInputChange = (e) => {
-    const { name, type, files, value } = e.target;
+    const { name, type, value } = e.target;
 
     // Validate contactNumber
     if (name === "contactNumber") {
@@ -37,41 +44,30 @@ const AddYourVenue = () => {
       const value = e.target.value;
       setFormData({ ...formData, [name]: value });
     }
-    // // Check if the input type is "file"
-    // const inputValue = type === "file" ? files[0] : value;
-
-    // setFormData({ ...formData, [name]: inputValue });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Venue Form Data: ", formData);
-    // Check if there is an error message for contactNumber
-    if (contactNumberError) {
-      console.log("Invalid contact number. Please correct the error.");
-      return;
+
+    const token = sessionStorage['token'];
+    const headers = {
+      'Content-Type': 'multipart/form-data', // Set the Content-Type header
+      'Authorization': `Bearer ${token}`, // Include your authorization header if needed
     }
+    console.log("Venue Form Data: ", formData);
 
     try {
       const formDataObject = new FormData();
 
       // Append each form field to the FormData object
       Object.keys(formData).forEach((key) => {
-        // if (key === "image") {
-        //   formDataObject.append(key, formData[key][0]); // Append the first file from the array
-        // } else {
         formDataObject.append(key, formData[key]);
-        // }
       });
 
       const response = await axios.post(
         "http://localhost:8080/api/venue/createVenue",
-        formDataObject,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        formDataObject , 
+        {headers}
       );
       console.log("Server Response: ", response.data);
       // Handle success, show a success message or redirect if needed
@@ -79,13 +75,6 @@ const AddYourVenue = () => {
       console.error("Error sending data to the server: ", error);
       // Handle error, show an error message or log it
     }
-
-    // try {
-    //   const response = axios.post("http://localhost:8080/api/venue", formData);
-    //   console.log("Server Response: ", response.data);
-    // } catch (error) {
-    //   console.error("Error sending data to the server: ", error);
-    // }
     setFormData(initialData);
   };
 

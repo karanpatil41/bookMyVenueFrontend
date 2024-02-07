@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 // import './UserSignup.css';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UserSignup = () => {
   const initialData = {
@@ -11,11 +12,11 @@ const UserSignup = () => {
     contactNumber: "",
     address: "",
     password: "",
-    cPassword: "",
-    roleId:1,
+    confirmPassword: "",
+    roleId: 1,
   };
   const [formData, setFormData] = useState(initialData);
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
+
   const [submitError, setSubmitError] = useState(null);
 
   const navigate = useNavigate();
@@ -28,57 +29,73 @@ const UserSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.cPassword) {
-      setPasswordMatchError(true);
-      return;
+    if (formData.firstName.length === 0) {
+      toast.error("Please enter firstName");
+    } else if (formData.lastName.length == 0) {
+      toast.error("Please enter lastName");
+    } else if (formData.email.length == 0) {
+      toast.error("Please enter email");
+    } else if (formData.contactNumber.length == 0) {
+      toast.error("Please enter contactNumber");
+    } else if (formData.address.length == 0) {
+      toast.error("Please enter address");
+    } else if (formData.password.length == 0) {
+      toast.error("Please enter password");
+    }else if (formData.confirmPassword.length == 0) {
+      toast.error("Please enter confirm password");
+    } else if (formData.confirmPassword != formData.password) {
+      toast.error("Password does not match");
     }
-    setPasswordMatchError(false);
-
     try {
       //Send user data to the server using Axios
       const response = await axios.post(
-        "http://localhost:8080/api/users/signup",
+        "http://localhost:8080/api/user/signup",
         formData
       );
 
       //Check the response and handle success or error accordingly
       if (response.status === 201) {
-        console.log("User signed up successfully");
+        toast.success("Successfully registered your account");
+        console.log("Server Response: ",response.data);
         setFormData(initialData);
+        navigate("/userLogin");
       } else {
+        toast.error("Error signing up user");
         console.error("Error signing up user");
         setSubmitError("Error signing up user");
       }
     } catch (error) {
+      toast.error(`Error signing up user: ${error.message}`);
       console.error("Error signing up user", error.message);
-      setSubmitError("Error signing up user");
     }
   };
   return (
     <div>
       <h1>User SignUp Page</h1>
       <form className="col-md-3" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="firstName">First Name: </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            className="form-control"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="lastName">Last Name: </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            className="form-control"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
+        <div className="row">
+          <div className="col">
+            <label htmlFor="firstName">First Name: </label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              className="form-control"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col mb-3">
+            <label htmlFor="lastName">Last Name: </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              className="form-control"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <div>
           <label htmlFor="email">Email :</label>
@@ -125,24 +142,28 @@ const UserSignup = () => {
           />
         </div>
         <div>
-          <label htmlFor="password">Confirm Password :</label>
+          <label htmlFor="confirmPassword">Confirm Password :</label>
           <input
             type="password"
-            id="cPassword"
-            name="cPassword"
+            id="confirmPassword"
+            name="confirmPassword"
             className="form-control"
-            value={formData.cPassword}
+            value={formData.confirmPassword}
             onChange={handleChange}
           />
         </div>
 
-        {passwordMatchError && (
-          <div className="text-danger mt-2">Passwords do not match.</div>
-        )}
-        {submitError && <div className="text-danger mt-2">{submitError}</div>}
+        <div className="row">
+          <div className="col">
+            <div className="mt-3">
+              Already have an account ? Login <Link to={'/userLogin'}>here</Link>
+            </div>
+          </div>
+        </div>
         <button type="submit" className="btn btn-warning mt-3">
           SignUp
         </button>
+        {/* </div> */}
       </form>
     </div>
   );
