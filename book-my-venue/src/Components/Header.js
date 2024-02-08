@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import axios from "axios";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logout as logoutAction } from "../features/authSlice";
 import { toast } from "react-toastify";
+import { sortedVenues } from "../features/venueSlice";
 
 const Header = () => {
   const initialFormData = {
     city: "",
     date: "",
-    numberOfGuests: "",
+    capacity: "",
   };
   const [formData, setFormData] = useState(initialFormData);
   const navigate = useNavigate();
@@ -37,19 +37,23 @@ const Header = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
+    
     try {
       //Make a POST request to your server endpoint
-      const response = await axios.post(
-        "http://localhost:8080/api/venue",
+      const response = await axios.get(
+        `http://localhost:8080/api/venue/search?city=${formData.city}&capacity=${formData.capacity}`,
         formData
       );
-      console.log("Server Response: ", response.data);
+      console.log("Server Response in Header: ", response.data);
+      dispatch(sortedVenues(response.data));
+      //Navigate to the Venue component and pass the response data as state
+      navigate("/api/venue/search",{venues: response.data});
+
     } catch (error) {
       console.error("Error sending data to the server: ", error);
     }
 
-    setFormData(initialFormData);
+    // setFormData(initialFormData);
   };
   //State to manage dropdown visibility
   const [dropdownVisible, setDropDownVisible] = useState(false);
@@ -121,8 +125,8 @@ const Header = () => {
             <div className="col-md-4">
               <input
                 type="number"
-                name="numberOfGuests"
-                value={formData.numberOfGuests}
+                name="capacity"
+                value={formData.capacity}
                 placeholder="Number of Guests"
                 className="form-control"
                 onChange={handleInputChange}
@@ -142,33 +146,34 @@ const Header = () => {
                 onMouseEnter={(e) => (e.target.style.transform = "scale(1.2)")}
                 onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
               />
+             
             </div>
           </div>
         </div>
         {/* Container 3: Toggle button */}
         <div className="col-md-2 mt-4 d-flex justify-content-end">
-              <NavLink
-                to="/userLogin"
-                className="mr-4"
-                style={{
-                  color: "white",
-                  textDecoration: "none",
-                }}
-              >
-                Login
-              </NavLink>
-              <NavLink
-                onClick={onLogout}
-                className="mr-4"
-                style={{
-                  color: "white",
-                  textDecoration: "none",
-                  pointerEvents: "auto",
-                }}
-              >
-                Logout
-              </NavLink>
-         
+          <NavLink
+            to="/userLogin"
+            className="mr-4"
+            style={{
+              color: "white",
+              textDecoration: "none",
+            }}
+          >
+            Login
+          </NavLink>
+          <NavLink
+            onClick={onLogout}
+            className="mr-4"
+            style={{
+              color: "white",
+              textDecoration: "none",
+              pointerEvents: "auto",
+            }}
+          >
+            Logout
+          </NavLink>
+
           <Dropdown
             show={dropdownVisible}
             onMouseEnter={handleMouseEnter}

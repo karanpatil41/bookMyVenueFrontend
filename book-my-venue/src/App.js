@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import Logout from "./Components/Logout";
 import { store } from "./store";
+import Venue from "./Components/Venue";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/addYourVenue" element={<AddYourVenue />} />
             <Route path="/api/venue/venueDetails" element={<VenueDetails />} />
+            <Route path="/api/venue/search" element={<Venue />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/trial" element={<Trial />} />
             <Route Component={Error} />

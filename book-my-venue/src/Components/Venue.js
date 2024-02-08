@@ -3,31 +3,52 @@ import "./Venue.css";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { Pagination } from "react-bootstrap";
+import { sortedVenues } from "../features/venueSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const Venue = () => {
+const Venue = ({ location }) => {
+  // read the redux state
+ 
+  const venue = useSelector((state) => state.venues);
+  // debugger;
+  console.log(`status = `, venue);
+
+ 
   const [venues, setVenues] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6); //Adjust the number of items per page
+  const dispatch = useDispatch();
 
+  //useEffect hook is used to fetch data from server when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8080/api/venue/getAllVenues"
         );
-        setVenues(response.data);
-        console.log("Server Response: ", response.data);
+        dispatch(sortedVenues(response.data));
+        // setVenues(response.data);
+        console.log("Server Response in Venue: ", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
+
+    // Check if venues data is passed from the Header component
+    // if(location && location.state.venues) {
+    //   console.log("inside if");
+    //   dispatch(sortedVenues(location.state.venues));
+    // }else{
+    //   console.log("inside else");
+    //   fetchData();
+    // }
   }, []);
 
   //Calculate the index range for the current page
   const indexOfLastVenue = currentPage * itemsPerPage;
   const indexOfFirstVenue = indexOfLastVenue - itemsPerPage;
-  const currentVenues = venues.slice(indexOfFirstVenue, indexOfLastVenue);
+  const currentVenues = venue.venues.slice(indexOfFirstVenue, indexOfLastVenue);
 
   //Function to change the current page
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
@@ -94,7 +115,7 @@ const Venue = () => {
               disabled={currentPage === 1}
             />
             {Array.from({
-              length: Math.ceil(venues.length / itemsPerPage),
+              length: Math.ceil(venue.venues.length / itemsPerPage),
             }).map((_, index) => (
               <Pagination.Item
                 key={index + 1}
@@ -106,7 +127,7 @@ const Venue = () => {
             ))}
             <Pagination.Next
               onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === Math.ceil(venues.length / itemsPerPage)}
+              disabled={currentPage === Math.ceil(venue.venues.length / itemsPerPage)}
             />
           </Pagination>
         </div>
