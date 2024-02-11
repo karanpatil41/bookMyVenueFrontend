@@ -18,8 +18,8 @@ function UserLogin() {
   const dispatch = useDispatch();
 
   //get the current state from redux
-  const status=useSelector((state) => state.auth);
-  console.log(`login: status => `, status)
+  // const status=useSelector((state) => state.auth);
+  // console.log(`login: status => `, status)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

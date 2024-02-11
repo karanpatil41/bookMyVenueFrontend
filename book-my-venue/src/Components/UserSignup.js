@@ -13,11 +13,10 @@ const UserSignup = () => {
     address: "",
     password: "",
     confirmPassword: "",
+    roleName:"NORMAL_USER",
     roleId: 1,
   };
   const [formData, setFormData] = useState(initialData);
-
-  const [submitError, setSubmitError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,43 +30,46 @@ const UserSignup = () => {
 
     if (formData.firstName.length === 0) {
       toast.error("Please enter firstName");
-    } else if (formData.lastName.length == 0) {
+    } else if (formData.lastName.length === 0) {
       toast.error("Please enter lastName");
-    } else if (formData.email.length == 0) {
+    } else if (formData.email.length === 0) {
       toast.error("Please enter email");
-    } else if (formData.contactNumber.length == 0) {
+    } else if (formData.contactNumber.length === 0) {
       toast.error("Please enter contactNumber");
-    } else if (formData.address.length == 0) {
+    }else if(formData.contactNumber.length !== 10){
+      toast.error("Please enter contactNumber with 10 digits only");
+    } else if (formData.address.length === 0) {
       toast.error("Please enter address");
-    } else if (formData.password.length == 0) {
+    } else if (formData.password.length === 0) {
       toast.error("Please enter password");
-    }else if (formData.confirmPassword.length == 0) {
+    }else if (formData.confirmPassword.length === 0) {
       toast.error("Please enter confirm password");
-    } else if (formData.confirmPassword != formData.password) {
+    } else if (formData.confirmPassword !== formData.password) {
       toast.error("Password does not match");
-    }
-    try {
-      //Send user data to the server using Axios
-      const response = await axios.post(
-        "http://localhost:8080/api/user/signup",
-        formData
-      );
-
-      //Check the response and handle success or error accordingly
-      if (response.status === 201) {
-        toast.success("Successfully registered your account");
-        console.log("Server Response: ",response.data);
-        setFormData(initialData);
-        navigate("/userLogin");
-      } else {
-        toast.error("Error signing up user");
-        console.error("Error signing up user");
-        setSubmitError("Error signing up user");
+    }else{
+      try {
+        //Send user data to the server using Axios
+        const response = await axios.post(
+          "http://localhost:8080/api/user/signup",
+          formData
+        );
+  
+        //Check the response and handle success or error accordingly
+        if (response.status === 201) {
+          toast.success("Successfully registered your account");
+          console.log("Server Response: ",response.data);
+          setFormData(initialData);
+          navigate("/userLogin");
+        } else {
+          toast.error("Error signing up user");
+          console.error("Error signing up user");
+        }
+      } catch (error) {
+        toast.error(`Error signing up user: ${error.message}`);
+        console.error("Error signing up user", error.message);
       }
-    } catch (error) {
-      toast.error(`Error signing up user: ${error.message}`);
-      console.error("Error signing up user", error.message);
     }
+    
   };
   return (
     <div>
@@ -163,7 +165,6 @@ const UserSignup = () => {
         <button type="submit" className="btn btn-warning mt-3">
           SignUp
         </button>
-        {/* </div> */}
       </form>
     </div>
   );

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const AddYourVenue = () => {
   const status = useSelector((state) => state.auth);
-  console.log(`status = `,status.status);
+  // console.log(`status = `,status.status);
 
   const initialData = {
     username: "",
@@ -49,11 +49,14 @@ const AddYourVenue = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = sessionStorage['token'];
     const headers = {
-      'Content-Type': 'multipart/form-data', // Set the Content-Type header
-      'Authorization': `Bearer ${token}`, // Include your authorization header if needed
+      headers: {
+        token: sessionStorage['token'],
+      },
+      // 'Content-Type': 'multipart/form-data', // Set the Content-Type header
+      // 'Authorization': `Bearer ${token}`, // Include your authorization header if needed
     }
+
     console.log("Venue Form Data: ", formData);
 
     try {
@@ -67,7 +70,7 @@ const AddYourVenue = () => {
       const response = await axios.post(
         "http://localhost:8080/api/venue/createVenue",
         formDataObject , 
-        {headers}
+        headers
       );
       console.log("Server Response: ", response.data);
       // Handle success, show a success message or redirect if needed
@@ -75,7 +78,7 @@ const AddYourVenue = () => {
       console.error("Error sending data to the server: ", error);
       // Handle error, show an error message or log it
     }
-    setFormData(initialData);
+    // setFormData(initialData);
   };
 
   return (

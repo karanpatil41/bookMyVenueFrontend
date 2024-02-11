@@ -6,11 +6,11 @@ import { Pagination } from "react-bootstrap";
 import { sortedVenues } from "../features/venueSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const Venue = ({ location }) => {
+const Venue = () => {
   // read the redux state
  
   const venue = useSelector((state) => state.venues);
-  // debugger;
+  
   console.log(`status = `, venue);
 
  
@@ -27,22 +27,13 @@ const Venue = ({ location }) => {
           "http://localhost:8080/api/venue/getAllVenues"
         );
         dispatch(sortedVenues(response.data));
-        // setVenues(response.data);
+        
         console.log("Server Response in Venue: ", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-
-    // Check if venues data is passed from the Header component
-    // if(location && location.state.venues) {
-    //   console.log("inside if");
-    //   dispatch(sortedVenues(location.state.venues));
-    // }else{
-    //   console.log("inside else");
-    //   fetchData();
-    // }
   }, []);
 
   //Calculate the index range for the current page

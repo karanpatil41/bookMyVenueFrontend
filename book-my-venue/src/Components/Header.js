@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -19,7 +19,13 @@ const Header = () => {
   const [formData, setFormData] = useState(initialFormData);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentDate = useRef(new Date().toISOString().split("T")[0]); // Get current date in ISO format
 
+  //get the current state from redux
+  const loginStatus = useSelector((state) => state.auth.status);
+  console.log(`login: status => `, loginStatus);
+  const username = sessionStorage['username'];
+  // console.log(`Username is ${username}`);
   const onLogout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
@@ -33,37 +39,27 @@ const Header = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    console.log(`login: status => `, loginStatus);
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    
+    console.log(`formData= `, formData);
     try {
       //Make a POST request to your server endpoint
       const response = await axios.get(
         `http://localhost:8080/api/venue/search?city=${formData.city}&capacity=${formData.capacity}`,
         formData
       );
+      //Navigate to the Venue component and pass the response data as state
+      navigate("/api/venue/search");
       console.log("Server Response in Header: ", response.data);
       dispatch(sortedVenues(response.data));
-      //Navigate to the Venue component and pass the response data as state
-      navigate("/api/venue/search",{venues: response.data});
-
     } catch (error) {
       console.error("Error sending data to the server: ", error);
     }
 
     // setFormData(initialFormData);
-  };
-  //State to manage dropdown visibility
-  const [dropdownVisible, setDropDownVisible] = useState(false);
-
-  const handleMouseEnter = () => {
-    setDropDownVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setDropDownVisible(false);
   };
 
   useEffect(() => {
@@ -119,6 +115,7 @@ const Header = () => {
                 value={formData.date}
                 placeholder="Enter Date"
                 className="form-control"
+                min={currentDate.current} // Set the min attribute to the current date
                 onChange={handleInputChange}
               />
             </div>
@@ -146,59 +143,80 @@ const Header = () => {
                 onMouseEnter={(e) => (e.target.style.transform = "scale(1.2)")}
                 onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
               />
-             
             </div>
           </div>
         </div>
         {/* Container 3: Toggle button */}
         <div className="col-md-2 mt-4 d-flex justify-content-end">
-          <NavLink
-            to="/userLogin"
-            className="mr-4"
-            style={{
-              color: "white",
-              textDecoration: "none",
-            }}
-          >
-            Login
-          </NavLink>
-          <NavLink
-            onClick={onLogout}
-            className="mr-4"
-            style={{
-              color: "white",
-              textDecoration: "none",
-              pointerEvents: "auto",
-            }}
-          >
-            Logout
-          </NavLink>
-
-          <Dropdown
-            show={dropdownVisible}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
+          {loginStatus && (
+            <NavLink
+              // onClick={}
+              className="mr-4"
+              style={{
+                color: "white",
+                textDecoration: "none",
+                pointerEvents: loginStatus ? "auto" : "none",
+                opacity: loginStatus ? 1 : 0.5,
+              }}
+            >
+              {username}
+            </NavLink>
+          )}
+          {!loginStatus && (
+            <NavLink
+              to="/userLogin"
+              className="mr-4"
+              style={{
+                color: "white",
+                textDecoration: "none",
+                pointerEvents: loginStatus ? "none" : "auto",
+                opacity: loginStatus ? 0.5 : 1,
+              }}
+            >
+              Login
+            </NavLink>
+          )}
+          {loginStatus && (
+            <NavLink
+              onClick={onLogout}
+              className="mr-4"
+              style={{
+                color: "white",
+                textDecoration: "none",
+                pointerEvents: loginStatus ? "auto" : "none",
+                opacity: loginStatus ? 1 : 0.5,
+              }}
+            >
+              Logout
+            </NavLink>
+          )}
+          <Dropdown>
             <Dropdown.Toggle
               variant="secondary"
               id="dropdown-basic"
               className="mr-2"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
             >
               <MdOutlineMenu />
             </Dropdown.Toggle>
 
-            <Dropdown.Menu
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Dropdown.Item as={NavLink} to="/userLogin">
-                Login
+            <Dropdown.Menu>
+            {loginStatus && (
+              <Dropdown.Item as={NavLink} 
+              // onClick={}
+              >
+                {username}
               </Dropdown.Item>
-              <Dropdown.Item as={NavLink} onClick={onLogout}>
-                Logout
-              </Dropdown.Item>
+            )}
+              {!loginStatus && (
+                <Dropdown.Item as={NavLink} to="/userLogin">
+                  Login
+                </Dropdown.Item>
+              )}
+              {loginStatus && (
+                <Dropdown.Item as={NavLink} onClick={onLogout}>
+                  Logout
+                </Dropdown.Item>
+              )}
               <Dropdown.Item as={NavLink} to="/userSignUp">
                 Sign up
               </Dropdown.Item>
