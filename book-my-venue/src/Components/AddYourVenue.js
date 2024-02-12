@@ -50,8 +50,8 @@ const AddYourVenue = () => {
     e.preventDefault();
 
     const headers = {
-      headers: {
-        token: sessionStorage['token'],
+      Headers: {
+        Authorization: sessionStorage['token'],
       },
       // 'Content-Type': 'multipart/form-data', // Set the Content-Type header
       // 'Authorization': `Bearer ${token}`, // Include your authorization header if needed
@@ -70,7 +70,11 @@ const AddYourVenue = () => {
       const response = await axios.post(
         "http://localhost:8080/api/venue/createVenue",
         formDataObject , 
-        headers
+        {
+          headers : {
+            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJydXR1QGdtYWlsLmNvbSIsImlhdCI6MTcwNzcwNTUwNiwiZXhwIjoxNzA3NzIzNTA2fQ.o3bt60WoRMxyDS3gYAwiUsFoOPsTAbfZRAm6evk4clIYmOaTitPj4kFPxYX4Ie7Fqt8MZYu7tVbkDDhiQAbaqw`
+          },
+        }
       );
       console.log("Server Response: ", response.data);
       // Handle success, show a success message or redirect if needed

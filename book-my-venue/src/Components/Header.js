@@ -24,7 +24,7 @@ const Header = () => {
   //get the current state from redux
   const loginStatus = useSelector((state) => state.auth.status);
   console.log(`login: status => `, loginStatus);
-  const username = sessionStorage['username'];
+  const username = sessionStorage["username"];
   // console.log(`Username is ${username}`);
   const onLogout = () => {
     sessionStorage.removeItem("token");
@@ -150,7 +150,7 @@ const Header = () => {
         <div className="col-md-2 mt-4 d-flex justify-content-end">
           {loginStatus && (
             <NavLink
-              // onClick={}
+              to="/userProfile"
               className="mr-4"
               style={{
                 color: "white",
@@ -200,13 +200,18 @@ const Header = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-            {loginStatus && (
-              <Dropdown.Item as={NavLink} 
-              // onClick={}
-              >
-                {username}
-              </Dropdown.Item>
-            )}
+              {loginStatus && (
+                <Dropdown.Item as={NavLink} to="/userProfile">
+                  User Profile
+                </Dropdown.Item>
+              )}
+
+              {loginStatus && (
+                <Dropdown.Item
+                  as={NavLink} to="/userProfile">
+                  {username}
+                </Dropdown.Item>
+              )}
               {!loginStatus && (
                 <Dropdown.Item as={NavLink} to="/userLogin">
                   Login
@@ -217,9 +222,11 @@ const Header = () => {
                   Logout
                 </Dropdown.Item>
               )}
+              {!loginStatus && (
               <Dropdown.Item as={NavLink} to="/userSignUp">
                 Sign up
               </Dropdown.Item>
+              )}
               <Dropdown.Divider />
               <Dropdown.Item as={NavLink} to="/addYourVenue">
                 Add Your Venue

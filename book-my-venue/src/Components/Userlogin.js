@@ -49,7 +49,6 @@ function UserLogin() {
           sessionStorage['username'] = data['username'];
         
           //  cache the token
-          console.log("Server Response : ", response);
           console.log("Response Data", response.data);
           
           //set the status in redux store
