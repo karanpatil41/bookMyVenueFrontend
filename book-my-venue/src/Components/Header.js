@@ -179,6 +179,7 @@ const Header = () => {
           {loginStatus && (
             <NavLink
               onClick={onLogout}
+              to="/"
               className="mr-4"
               style={{
                 color: "white",
@@ -231,9 +232,11 @@ const Header = () => {
               <Dropdown.Item as={NavLink} to="/addYourVenue">
                 Add Your Venue
               </Dropdown.Item>
+              {!loginStatus && (
               <Dropdown.Item as={NavLink} to="/vmSignUp">
                 Venue Manager SignUp
               </Dropdown.Item>
+              )}
               <Dropdown.Item as={NavLink} to="/contact">
                 Contact Us
               </Dropdown.Item>

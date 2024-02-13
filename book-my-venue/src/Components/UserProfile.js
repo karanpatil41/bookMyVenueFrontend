@@ -10,15 +10,17 @@ export const UserProfile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      let response
       try {
-        const response = await axios.get(
+         response = await axios.get(
           `http://localhost:8080/api/user/userProfile?username=${username}`
         );
         console.log("Response Data", response.data);
         setUserData(response.data);
+        console.log("Response =", response.status);
+
       } catch (error) {
         console.log("Server Response: ", error);
-        toast.error("Server Response: ", error);
       }
     };
     fetchData(); //Unless you don't call the function, no call to server

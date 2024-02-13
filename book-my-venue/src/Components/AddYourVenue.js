@@ -1,6 +1,7 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 // import { fetchAndSetToken } from "../Redux/authAction";
 
 const AddYourVenue = () => {
@@ -19,8 +20,7 @@ const AddYourVenue = () => {
   };
   const [formData, setFormData] = useState(initialData);
   const [contactNumberError, setContactNumberError] = useState("");
-
- 
+  const token = sessionStorage['token'];
 
   const handleInputChange = (e) => {
     const { name, type, value } = e.target;
@@ -51,11 +51,11 @@ const AddYourVenue = () => {
 
     const headers = {
       Headers: {
-        Authorization: sessionStorage['token'],
+        Authorization: sessionStorage["token"],
       },
       // 'Content-Type': 'multipart/form-data', // Set the Content-Type header
       // 'Authorization': `Bearer ${token}`, // Include your authorization header if needed
-    }
+    };
 
     console.log("Venue Form Data: ", formData);
 
@@ -69,20 +69,22 @@ const AddYourVenue = () => {
 
       const response = await axios.post(
         "http://localhost:8080/api/venue/createVenue",
-        formDataObject , 
+        formDataObject,
         {
-          headers : {
-            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJydXR1QGdtYWlsLmNvbSIsImlhdCI6MTcwNzcwNTUwNiwiZXhwIjoxNzA3NzIzNTA2fQ.o3bt60WoRMxyDS3gYAwiUsFoOPsTAbfZRAm6evk4clIYmOaTitPj4kFPxYX4Ie7Fqt8MZYu7tVbkDDhiQAbaqw`
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       console.log("Server Response: ", response.data);
+      toast.success("Your venue is listed!...Congrats!!");
+      setFormData(initialData);
       // Handle success, show a success message or redirect if needed
     } catch (error) {
       console.error("Error sending data to the server: ", error);
       // Handle error, show an error message or log it
     }
-    // setFormData(initialData);
+    
   };
 
   return (
