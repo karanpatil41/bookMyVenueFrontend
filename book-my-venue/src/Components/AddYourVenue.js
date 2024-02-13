@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 // import { fetchAndSetToken } from "../Redux/authAction";
 
 const AddYourVenue = () => {
-  const status = useSelector((state) => state.auth);
-  // console.log(`status = `,status.status);
+  const status = useSelector((state) => state.auth.status);
+  console.log(`status = `,status.status);
 
   const initialData = {
     username: "",
@@ -49,12 +49,17 @@ const AddYourVenue = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if(!status){
+      console.log("Please signin as Venue Manager");
+      toast.error("Please signin as Venue Manager");
+      return; // Stop further execution if status is false
+    }else {
+
+    
     const headers = {
       Headers: {
         Authorization: sessionStorage["token"],
       },
-      // 'Content-Type': 'multipart/form-data', // Set the Content-Type header
-      // 'Authorization': `Bearer ${token}`, // Include your authorization header if needed
     };
 
     console.log("Venue Form Data: ", formData);
@@ -84,6 +89,7 @@ const AddYourVenue = () => {
       console.error("Error sending data to the server: ", error);
       // Handle error, show an error message or log it
     }
+  }
     
   };
 
