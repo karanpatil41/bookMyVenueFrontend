@@ -70,10 +70,8 @@ const Vmsignup = () => {
         console.error("Error signing up user", error.message);
       }
     }
-    
-
-    //Clear the form after submission
-    setFormData(initialData);
+    // //Clear the form after submission
+    // setFormData(initialData);
   };
 
   return (
