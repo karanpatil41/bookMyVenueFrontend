@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 
 const AddYourVenue = () => {
   const status = useSelector((state) => state.auth.status);
-  console.log(`status = `,status.status);
-
+  console.log(`status = `, status.status);
+  const usernameS = sessionStorage["username"];
   const initialData = {
-    username: "",
+    username: usernameS,
     venueName: "",
     contactNumber: "",
     address: "",
@@ -20,7 +20,7 @@ const AddYourVenue = () => {
   };
   const [formData, setFormData] = useState(initialData);
   const [contactNumberError, setContactNumberError] = useState("");
-  const token = sessionStorage['token'];
+  const token = sessionStorage["token"];
 
   const handleInputChange = (e) => {
     const { name, type, value } = e.target;
@@ -49,67 +49,52 @@ const AddYourVenue = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!status){
+    if (!status) {
       console.log("Please signin as Venue Manager");
       toast.error("Please signin as Venue Manager");
       return; // Stop further execution if status is false
-    }else {
+    } else {
+      const headers = {
+        Headers: {
+          Authorization: sessionStorage["token"],
+        },
+      };
 
-    
-    const headers = {
-      Headers: {
-        Authorization: sessionStorage["token"],
-      },
-    };
+      console.log("Venue Form Data: ", formData);
 
-    console.log("Venue Form Data: ", formData);
+      try {
+        const formDataObject = new FormData();
 
-    try {
-      const formDataObject = new FormData();
+        // Append each form field to the FormData object
+        Object.keys(formData).forEach((key) => {
+          formDataObject.append(key, formData[key]);
+        });
 
-      // Append each form field to the FormData object
-      Object.keys(formData).forEach((key) => {
-        formDataObject.append(key, formData[key]);
-      });
-
-      const response = await axios.post(
-        "http://localhost:8080/api/venue/createVenue",
-        formDataObject,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Server Response: ", response.data);
-      toast.success("Your venue is listed!...Congrats!!");
-      setFormData(initialData);
-      // Handle success, show a success message or redirect if needed
-    } catch (error) {
-      console.error("Error sending data to the server: ", error);
-      // Handle error, show an error message or log it
+        const response = await axios.post(
+          "http://localhost:8080/api/venue/createVenue",
+          formDataObject,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Server Response: ", response.data);
+        toast.success("Your venue is listed!...Congrats!!");
+        setFormData(initialData);
+        // Handle success, show a success message or redirect if needed
+      } catch (error) {
+        console.error("Error sending data to the server: ", error);
+        // Handle error, show an error message or log it
+      }
     }
-  }
-    
   };
 
   return (
     <div>
       <h2>Venue Form</h2>
       <form className="col-md-3" encType="multipart/form-data">
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            Enter Username
-          </label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            className="form-control"
-            id="username"
-            onChange={handleInputChange}
-          />
-        </div>
+        <h5 className="card-title">Username: {formData.username}</h5>
         <div className="mb-3">
           <label htmlFor="venueName" className="form-label">
             Enter Venue Name

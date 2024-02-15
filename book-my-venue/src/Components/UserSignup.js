@@ -13,20 +13,33 @@ const UserSignup = () => {
     address: "",
     password: "",
     confirmPassword: "",
-    roleName:"NORMAL_USER",
+    roleName:"USER",
     roleId: 1,
   };
   const [formData, setFormData] = useState(initialData);
-
+  const [contactNumberError, setContactNumberError]=useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Validate contactNumber
+    if (name === "contactNumber") {
+     const isValidContactNumber = /^\d{10}$/.test(value);
+     if (!isValidContactNumber) {
+       // Display error message
+       setContactNumberError("Contact number should be of 10 digits");
+     } else {
+       // Clear error message if contact number is valid
+       setContactNumberError("");
+     }
+   }
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
 
     if (formData.firstName.length === 0) {
       toast.error("Please enter firstName");
@@ -121,6 +134,12 @@ const UserSignup = () => {
             onChange={handleChange}
           />
         </div>
+         {/* Display error message if there is one */}
+         {contactNumberError && (
+            <div style={{ color: "red", marginBottom: "10px" }}>
+              {contactNumberError}
+            </div>
+          )}
         <div>
           <label htmlFor="address">Address :</label>
           <input

@@ -208,8 +208,7 @@ const Header = () => {
               )}
 
               {loginStatus && (
-                <Dropdown.Item
-                  as={NavLink} to="/userProfile">
+                <Dropdown.Item as={NavLink} to="/userProfile">
                   {username}
                 </Dropdown.Item>
               )}
@@ -224,18 +223,28 @@ const Header = () => {
                 </Dropdown.Item>
               )}
               {!loginStatus && (
-              <Dropdown.Item as={NavLink} to="/userSignUp">
-                Sign up
-              </Dropdown.Item>
+                <Dropdown.Item as={NavLink} to="/userSignUp">
+                  Sign up
+                </Dropdown.Item>
               )}
               <Dropdown.Divider />
               <Dropdown.Item as={NavLink} to="/addYourVenue">
                 Add Your Venue
               </Dropdown.Item>
+              {loginStatus && (
+                <Dropdown.Item as={NavLink} to="/api/venue/userVenue">
+                  Your Venue Details
+                </Dropdown.Item>
+              )}
+              {loginStatus && (
+                <Dropdown.Item as={NavLink} to="/editVenue">
+                  Edit your Venue
+                </Dropdown.Item>
+              )}
               {!loginStatus && (
-              <Dropdown.Item as={NavLink} to="/vmSignUp">
-                Venue Manager SignUp
-              </Dropdown.Item>
+                <Dropdown.Item as={NavLink} to="/vmSignUp">
+                  Venue Manager SignUp
+                </Dropdown.Item>
               )}
               <Dropdown.Item as={NavLink} to="/contact">
                 Contact Us

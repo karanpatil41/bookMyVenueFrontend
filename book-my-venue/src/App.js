@@ -14,12 +14,14 @@ import VenueDetails from "./Components/VenueDetails";
 import { Provider } from "react-redux";
 
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 import Logout from "./Components/Logout";
 import { store } from "./store";
 import Venue from "./Components/Venue";
 import { UserProfile } from "./Components/UserProfile";
 import UpdateUser from "./Components/UpdateUser";
+import EditVenue from "./Components/EditVenue";
+import UserVenue from "./Components/UserVenue";
 
 function App() {
   return (
@@ -32,16 +34,18 @@ function App() {
             <Route path="/vmSignUp" element={<Vmsignup />} />
             <Route path="/userLogin" element={<UserLogin />} />
             <Route path="/userSignUp" element={<UserSignup />} />
-            <Route path="/userProfile" element={<UserProfile/>}/>
-            <Route path="/api/user/updateProfile" element={<UpdateUser/>}/>
+            <Route path="/userProfile" element={<UserProfile />} />
+            <Route path="/api/user/updateProfile" element={<UpdateUser />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/addYourVenue" element={<AddYourVenue />} />
+            <Route path="/editVenue" element={<EditVenue />} />
+            <Route path="/api/venue/userVenue" element={<UserVenue />} />
             <Route path="/api/venue/venueDetails" element={<VenueDetails />} />
             <Route path="/api/venue/search" element={<Venue />} />
+
             <Route path="/logout" element={<Logout />} />
             <Route path="/trial" element={<Trial />} />
             <Route Component={Error} />
-            
           </Routes>
           <ToastContainer />
           <Footer />

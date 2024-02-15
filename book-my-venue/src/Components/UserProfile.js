@@ -10,15 +10,14 @@ export const UserProfile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let response
+      let response;
       try {
-         response = await axios.get(
+        response = await axios.get(
           `http://localhost:8080/api/user/userProfile?username=${username}`
         );
         console.log("Response Data", response.data);
         setUserData(response.data);
         console.log("Response =", response.status);
-
       } catch (error) {
         console.log("Server Response: ", error);
       }
@@ -40,14 +39,13 @@ export const UserProfile = () => {
             <p className="card-text">
               Contact Number : {userData.contactNumber}
             </p>
-            <NavLink to={{
-                  pathname: "/api/user/updateProfile",
-                  search: `username=${username}`,
-                }}>
-              <button
-                type="button"
-                className="btn btn-primary"
-              >
+            <NavLink
+              to={{
+                pathname: "/api/user/updateProfile",
+                search: `username=${username}`,
+              }}
+            >
+              <button type="button" className="btn btn-primary">
                 Edit profile
               </button>
             </NavLink>
