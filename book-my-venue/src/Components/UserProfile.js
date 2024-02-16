@@ -24,7 +24,8 @@ export const UserProfile = () => {
     };
     fetchData(); //Unless you don't call the function, no call to server
   }, []); //Empty dependency array to ensure the effect runs only once
-
+  //If empty dependency array removed, then the effect keep on running.
+  //if [id] id passed in dependency array then,
   return (
     <div className="container">
       <h1 className="my-4">User Profile</h1>

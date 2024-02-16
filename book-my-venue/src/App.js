@@ -20,8 +20,8 @@ import { store } from "./store";
 import Venue from "./Components/Venue";
 import { UserProfile } from "./Components/UserProfile";
 import UpdateUser from "./Components/UpdateUser";
-import EditVenue from "./Components/EditVenue";
 import UserVenue from "./Components/UserVenue";
+import UpdateVenue from "./Components/UpdateVenue";
 
 function App() {
   return (
@@ -38,11 +38,11 @@ function App() {
             <Route path="/api/user/updateProfile" element={<UpdateUser />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/addYourVenue" element={<AddYourVenue />} />
-            <Route path="/editVenue" element={<EditVenue />} />
+            <Route path="/api/venue/updateVenue" element={<UpdateVenue />} />
             <Route path="/api/venue/userVenue" element={<UserVenue />} />
             <Route path="/api/venue/venueDetails" element={<VenueDetails />} />
             <Route path="/api/venue/search" element={<Venue />} />
-
+            updateVenue
             <Route path="/logout" element={<Logout />} />
             <Route path="/trial" element={<Trial />} />
             <Route Component={Error} />

@@ -39,7 +39,6 @@ const Header = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(`login: status => `, loginStatus);
   };
 
   const handleSearch = async (e) => {

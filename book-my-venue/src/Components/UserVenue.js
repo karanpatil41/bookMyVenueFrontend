@@ -32,7 +32,6 @@ const UserVenue = () => {
               <div className="card-body">
                 <div className="card-title">Username : {venue.username}</div>
                 <p className="card-text">Email : {venue.username}</p>
-
                 <p className="card-text">Venue Name : {venue.venueName}</p>
                 <p className="card-text">
                   Contact Number : {venue.contactNumber}
@@ -49,8 +48,8 @@ const UserVenue = () => {
                 <p className="card-text">Description : {venue.description}</p>
                 <NavLink
                   to={{
-                    pathname: "/api/user/userVenue",
-                    // search: `id=${id}`,
+                    pathname: "/api/venue/updateVenue",
+                    search: `id=${venue.id}`,
                   }}
                 >
                   <button type="button" className="btn btn-primary">
