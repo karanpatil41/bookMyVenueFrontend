@@ -7,13 +7,21 @@ import { toast } from "react-toastify";
 export const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const username = sessionStorage["username"];
+  const token = sessionStorage["token"];
+  const headers = {
+    key: "Authorization",
+    value: `Bearer ${token}`,
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       let response;
       try {
         response = await axios.get(
-          `http://localhost:8080/api/user/userProfile?username=${username}`
+          `http://localhost:8080/api/user/userProfile?username=${username}`,
+          {
+            headers: [headers],
+          }
         );
         console.log("Response Data", response.data);
         setUserData(response.data);

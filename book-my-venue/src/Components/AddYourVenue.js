@@ -6,8 +6,9 @@ import { toast } from "react-toastify";
 
 const AddYourVenue = () => {
   const status = useSelector((state) => state.auth.status);
-  console.log(`status = `, status.status);
+  // console.log(`status = `, status);
   const usernameS = sessionStorage["username"];
+  const id = sessionStorage["id"];
   const initialData = {
     username: usernameS,
     venueName: "",
@@ -17,6 +18,7 @@ const AddYourVenue = () => {
     amount: "",
     image: "", // This should be a File object, not a string
     description: "",
+    venueManagerId: id,
   };
   const [formData, setFormData] = useState(initialData);
   const [contactNumberError, setContactNumberError] = useState("");
@@ -60,6 +62,7 @@ const AddYourVenue = () => {
         },
       };
 
+      console.log("id=", id);
       console.log("Venue Form Data: ", formData);
 
       try {

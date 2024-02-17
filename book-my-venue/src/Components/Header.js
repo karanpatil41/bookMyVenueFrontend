@@ -29,6 +29,7 @@ const Header = () => {
   const onLogout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
+    sessionStorage.removeItem("id");
 
     //update the global store
     dispatch(logoutAction());

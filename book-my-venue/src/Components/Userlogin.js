@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login as loginAction } from "../features/authSlice";
 
 function UserLogin() {
+  const token = sessionStorage["token"];
   const initialData = {
     email: "",
     password: "",
@@ -14,7 +15,7 @@ function UserLogin() {
 
   const [formData, setFormData] = useState(initialData);
   const location = useLocation();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //get the current state from redux
@@ -31,38 +32,53 @@ function UserLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(formData.email.length === 0){
-      toast.error('Please enter email')
-    }else if(formData.password.length == 0){
-      toast.error('Please enter password')
+    if (formData.email.length === 0) {
+      toast.error("Please enter email");
+    } else if (formData.password.length == 0) {
+      toast.error("Please enter password");
     } else {
       try {
         const response = await axios.post(
           "http://localhost:8080/api/user/login",
           formData
         );
-  
+
         if (response.status === 200) {
-          const data = response['data'];
-        //Store the JWT token and username in the state or use a global state management solution
-          sessionStorage['token'] = data['jwtToken']
-          sessionStorage['username'] = data['username'];
-        
+          const data = response["data"];
+          //Store the JWT token and username in the state or use a global state management solution
+          sessionStorage["token"] = data["jwtToken"];
+          sessionStorage["username"] = data["username"];
+
           //  cache the token
           console.log("Response Data", response.data);
-          
-          //set the status in redux store
-          dispatch(loginAction())
 
-          toast.success('Successfully Logged in.',response.data.username);
-          navigate('/');
+          //set the status in redux store
+          dispatch(loginAction());
+
+          toast.success("Successfully Logged in.", response.data.username);
+          navigate("/");
         }
       } catch (error) {
         console.error("Error during login: ", error);
-        toast.error("Server Response: "+error);
+        toast.error("Server Response: " + error);
       }
     }
-
+    try {
+      const username = sessionStorage["username"];
+      const response = await axios.get(
+        `http://localhost:8080/api/user/userProfile?username=${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = response["data"];
+      sessionStorage["id"] = data["id"];
+      console.log("Response Data: ", response.data);
+    } catch (error) {
+      console.log("Error", error);
+    }
     setFormData(initialData);
   };
 
