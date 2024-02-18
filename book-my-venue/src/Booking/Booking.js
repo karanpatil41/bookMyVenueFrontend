@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Booking.css";
@@ -12,6 +12,7 @@ const Booking = () => {
   const venueid = queryParams.get("venueId");
   const userid = sessionStorage["id"];
   const token = sessionStorage["token"];
+  const username = sessionStorage["username"];
 
   const [bookingData, setBookingData] = useState({
     checkinDate: null,
@@ -20,8 +21,26 @@ const Booking = () => {
     user: userid,
     venue: venueid,
     status: "Payment pending",
+    createdBy: username,
+    amount: null,
   });
+  const [venueUserData, setVenueUserData] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/venue/findVenueAndUserData/${bookingData.venue}`
+        );
+        console.log("Response", response.data);
+        setVenueUserData(response.data);
+        setBookingData({ ...bookingData, amount: response.data[3] });
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+    fetchData();
+  }, []);
   const handleChangeDate = (date, name) => {
     setBookingData({ ...bookingData, [name]: date });
   };
@@ -110,6 +129,30 @@ const Booking = () => {
             </button>
           </div>
         </div>
+        {venueUserData && venueUserData.length > 0 && (
+          <div className="booking-details">
+            <p>
+              <strong>Venue Name:</strong> {venueUserData[1]}
+            </p>
+            <p>
+              <strong>Address:</strong> {venueUserData[2]}
+            </p>
+            <p>
+              <strong>Amount in ₹ :</strong>{" "}
+              <span className="amount">{venueUserData[3]}</span>
+            </p>
+            <p className="manager-details">
+              <strong>Venue Manager Name :</strong> {venueUserData[5]}{" "}
+              {venueUserData[6]}
+            </p>
+            <p className="manager-details">
+              <strong>Venue Manager No :</strong> {venueUserData[7]}
+            </p>
+            <p className="manager-id">
+              <strong>Venue Manager id :</strong> {venueUserData[4]}
+            </p>
+          </div>
+        )}
         <button type="submit" className="btn btn-primary">
           Book
         </button>

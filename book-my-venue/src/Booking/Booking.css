@@ -2,3 +2,30 @@
   width: 30%; /* Adjust the width as per your requirement */
   margin: 0 auto; /* Center the container horizontally */
 }
+/* Booking.css */
+.booking-details {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.booking-details p {
+  margin-bottom: 8px;
+}
+
+.booking-details p strong {
+  font-weight: bold;
+}
+
+.booking-details .amount {
+  color: #007bff;
+}
+
+.booking-details .manager-details {
+  color: #28a745;
+}
+
+.booking-details .manager-id {
+  color: #6c757d;
+}

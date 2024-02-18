@@ -159,7 +159,7 @@ const AddYourVenue = () => {
         </div>
         <div className="mb-3">
           <label for="amount" className="form-label">
-            Enter Amount
+            Enter Amount in ₹
           </label>
           <input
             type="number"
