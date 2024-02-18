@@ -15,7 +15,8 @@ const Vmsignup = () => {
     address: "",
     password: "",
     confirmPassword: "",
-    roleName:"VENUE_MANAGER",
+    roleName: "VENUE_MANAGER",
+    managerStatus: "Not Verified",
     roleId: 2,
   };
   const [formData, setFormData] = useState(initialData);
@@ -37,7 +38,7 @@ const Vmsignup = () => {
       toast.error("Please enter email");
     } else if (formData.contactNumber.length === 0) {
       toast.error("Please enter contactNumber");
-    }else if(formData.contactNumber.length !== 10){
+    } else if (formData.contactNumber.length !== 10) {
       toast.error("Please enter contactNumber with 10 digits only");
     } else if (formData.address.length === 0) {
       toast.error("Please enter address");
@@ -47,14 +48,14 @@ const Vmsignup = () => {
       toast.error("Please enter confirm password");
     } else if (formData.confirmPassword !== formData.password) {
       toast.error("Password does not match");
-    }else{
+    } else {
       try {
         //Send user data to the server using Axios
         const response = await axios.post(
           "http://localhost:8080/api/user/signup",
           formData
         );
-  
+
         //Check the response and handle success or error accordingly
         if (response.status === 201) {
           toast.success("Successfully registered your account");
@@ -161,7 +162,8 @@ const Vmsignup = () => {
         <div className="row">
           <div className="col">
             <div className="mt-3">
-              Already have an account ? Login <Link to={'/userLogin'}>here</Link>
+              Already have an account ? Login{" "}
+              <Link to={"/userLogin"}>here</Link>
             </div>
           </div>
         </div>

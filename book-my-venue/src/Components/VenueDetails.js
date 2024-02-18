@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const VenueDetails = ({ onDataChanged }) => {
@@ -62,9 +62,19 @@ const VenueDetails = ({ onDataChanged }) => {
       <p>Amount: {amount}</p>
       <p>Description: {description}</p>
       <p>Contact Number: {contactNumber}</p>
-      <button type="button" className="btn btn-warning">
-        Book Now
-      </button>
+
+      <NavLink
+        as="div"
+        to={{
+          pathname: "/api/venue/booking",
+          search: `venueId=${id}`,
+          state: { curElem: venueDetails },
+        }}
+      >
+        <button type="button" className="btn btn-warning">
+          Book Now
+        </button>
+      </NavLink>
     </div>
   );
 };

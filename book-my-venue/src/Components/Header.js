@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout as logoutAction } from "../features/authSlice";
 import { toast } from "react-toastify";
 import { sortedVenues } from "../features/venueSlice";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Header = () => {
   const initialFormData = {
@@ -38,8 +40,12 @@ const Header = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value } = e.target || {}; // Use default empty object if e.target is undefined
+    if (name) {
+      setFormData({ ...formData, [name]: value });
+    } else {
+      console.error("Input name is undefined");
+    }
   };
 
   const handleSearch = async (e) => {
@@ -81,6 +87,9 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleChangeDate = (date, name) => {
+    setFormData({ ...formData, [name]: date });
+  };
   return (
     <div className="container-fluid py-3 dark-background" id="header">
       <div className="row justify-content-between">
@@ -108,7 +117,22 @@ const Header = () => {
                 onChange={handleInputChange}
               />
             </div>
+
             <div className="col-md-3">
+              {/* <label htmlFor="checkoutDate" className="form-label">
+                Enter Date
+              </label> */}
+              <DatePicker
+                selected={formData.date}
+                placeholderText="Enter Date"
+                name="date"
+                // value={formData.date}
+                minDate={currentDate.current}
+                className="form-control"
+                onChange={(date) => handleChangeDate(date, "date")}
+              />
+            </div>
+            {/* <div className="col-md-3">
               <input
                 type="date"
                 name="date"
@@ -118,7 +142,7 @@ const Header = () => {
                 min={currentDate.current} // Set the min attribute to the current date
                 onChange={handleInputChange}
               />
-            </div>
+            </div> */}
             <div className="col-md-4">
               <input
                 type="number"
@@ -251,36 +275,6 @@ const Header = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-
-          {/* <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <MdOutlineMenu />
-            </button>
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <div className="col-md-2">
-                <NavLink to="/userLogin" className="dropdown-item">
-                  Login
-                </NavLink>
-                <NavLink to="/userSignUp" className="dropdown-item">
-                  Sign up
-                </NavLink>
-                <hr className="dropdown-divider" />
-                <NavLink to="/bmvYourVenue" className="dropdown-item">
-                  Add Your Venue
-                </NavLink>
-                <NavLink to="/contact" className="dropdown-item">
-                  Contact Us
-                </NavLink>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
