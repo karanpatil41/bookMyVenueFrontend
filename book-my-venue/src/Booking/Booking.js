@@ -5,6 +5,7 @@ import "./Booking.css";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Booking = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Booking = () => {
     noOfGuests: 0,
     user: userid,
     venue: venueid,
-    status: "Payment pending",
+    paymentStatus: "pending",
     createdBy: username,
     amount: null,
   });
@@ -71,6 +72,8 @@ const Booking = () => {
         formattedBookingData
       );
       console.log("Response Data: ", response.data);
+      toast.success("Your venue is reserved.");
+      toast.error("Pay for confirmation");
     } catch (error) {
       console.log("Error:", error);
     }
