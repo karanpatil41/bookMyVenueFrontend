@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "./BookingRequest.module.css"; // Import CSS module // Import CSS file directly here
+import { toast } from "react-toastify";
 
 const BookingRequest = () => {
   const userId = sessionStorage["id"];
@@ -59,6 +60,48 @@ const BookingRequest = () => {
     // Find user details for the selected booking ID
     const userDetails = userList.find((user) => user.bookingId === bookingId);
     setUserDetails(userDetails);
+  };
+
+  // Function to handle accepting a booking
+  const handleAcceptBooking = async (bookingId) => {
+    try {
+      // Make an API call to accept the booking with the given bookingId
+      await axios.post(
+        `http://localhost:8080/booking/accept/${bookingId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // You may want to update the state or perform other actions after accepting the booking
+      console.log("Booking accepted successfully");
+      toast.warn("You Accepted Booking!!");
+    } catch (error) {
+      console.error("Error accepting booking:", error);
+    }
+  };
+
+  // Function to handle rejecting a booking
+  const handleRejectBooking = async (bookingId) => {
+    try {
+      // Make an API call to reject the booking with the given bookingId
+      await axios.post(
+        `http://localhost:8080/booking/reject/${bookingId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // You may want to update the state or perform other actions after rejecting the booking
+      console.log("Booking rejected successfully");
+      toast.error("You Rejected Booking!!");
+    } catch (error) {
+      console.error("Error rejecting booking:", error);
+    }
   };
 
   return (
@@ -123,6 +166,18 @@ const BookingRequest = () => {
                   >
                     View User Details
                   </button>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => handleAcceptBooking(booking.bookingId)}
+                  >
+                    Accept Booking
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleRejectBooking(booking.bookingId)}
+                  >
+                    Reject Booking
+                  </button>
                 </li>
               ))}
           </ul>
@@ -131,7 +186,10 @@ const BookingRequest = () => {
 
       {selectedBookingId && userDetails && (
         <div className="user-details">
-          <h2>User Details for Booking ID: {selectedBookingId}</h2>
+          <h2>
+            User Details for Booking ID: {selectedBookingId} -{" "}
+            {userDetails.firstName} {userDetails.lastName}
+          </h2>
           <ul className="list-group">
             <li className="list-group-item">
               <div>First Name: {userDetails.firstName}</div>
