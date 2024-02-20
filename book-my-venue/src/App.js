@@ -23,6 +23,7 @@ import UpdateUser from "./Components/UpdateUser";
 import UserVenue from "./Components/UserVenue";
 import UpdateVenue from "./Components/UpdateVenue";
 import Booking from "./Booking/Booking";
+import BookingRequest from "./Booking/BookingRequest";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="/api/venue/userVenue" element={<UserVenue />} />
             <Route path="/api/venue/venueDetails" element={<VenueDetails />} />
             <Route path="/api/venue/booking" element={<Booking />} />
+            <Route path="/bookingRequest" element={<BookingRequest />} />
             <Route path="/api/venue/search" element={<Venue />} />
             updateVenue
             <Route path="/logout" element={<Logout />} />

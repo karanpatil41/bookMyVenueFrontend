@@ -252,6 +252,11 @@ const Header = () => {
                 </Dropdown.Item>
               )}
               <Dropdown.Divider />
+              {loginStatus && (
+                <Dropdown.Item as={NavLink} to="/bookingRequest">
+                  Booking Requests
+                </Dropdown.Item>
+              )}
               <Dropdown.Item as={NavLink} to="/addYourVenue">
                 Add Your Venue
               </Dropdown.Item>

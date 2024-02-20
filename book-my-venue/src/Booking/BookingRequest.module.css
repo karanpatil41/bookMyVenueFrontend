@@ -1,0 +1,21 @@
+/* BookingRequest.module.css */
+
+.booking-request-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.booking-request-venue-list,
+.booking-request-booking-list,
+.booking-request-user-list {
+  margin-bottom: 40px;
+}
+
+.booking-request-list-group-item {
+  margin-bottom: 10px;
+}
+
+.selected-venue {
+  background-color: lightblue;
+}
